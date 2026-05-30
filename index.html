@@ -113,13 +113,16 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 .diff-btn.hard.active{background:#ff6b35;color:#fff8e0;box-shadow:0 0 12px rgba(255,107,53,.5);}
 .diff-desc{font-size:.8rem;color:var(--text-soft);text-align:center;margin-bottom:.7rem;font-style:italic;min-height:14px;}
 
-.player-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.18);border-radius:12px;padding:.42rem .6rem;min-width:0;overflow:hidden;}
-.player-row input[type=text]{flex:1;min-width:0;background:rgba(255,255,255,.07);border:2px solid rgba(255,107,53,.3);border-radius:10px;padding:.4rem .65rem;font-family:var(--font-body);font-size:.9rem;font-weight:800;color:var(--accent2);outline:none;transition:border-color .2s;width:0;}
-.player-row input[type=text]:focus{border-color:var(--accent);}
-.player-row input[type=text]::placeholder{color:rgba(255,184,144,.35);}
-.player-row input[type=text]:disabled{opacity:.3;}
-.ptog{background:rgba(255,107,53,.07);border:2px solid rgba(255,107,53,.25);border-radius:10px;padding:.28rem .55rem;font-family:var(--font-display);font-size:.78rem;cursor:pointer;color:var(--text-soft);white-space:nowrap;transition:all .2s;flex-shrink:0;}
+.player-row{display:flex;align-items:center;gap:.45rem;margin-bottom:.5rem;background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.18);border-radius:12px;padding:.4rem .55rem;min-width:0;overflow:hidden;}
+.car-slot{width:52px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.player-name-input{flex:1;min-width:0;width:0;background:rgba(255,255,255,.07);border:2px solid rgba(255,107,53,.3);border-radius:10px;padding:.38rem .6rem;font-family:var(--font-body);font-size:.9rem;font-weight:800;color:var(--accent2);outline:none;transition:border-color .2s;overflow:hidden;text-overflow:ellipsis;}
+.player-name-input:focus{border-color:var(--accent);}
+.player-name-input::placeholder{color:rgba(255,184,144,.35);}
+.player-name-input:disabled{opacity:.35;}
+.player-check{font-size:.95rem;color:#4ecb71;font-weight:900;flex-shrink:0;padding:0 .25rem;line-height:1;}
+.ptog{background:rgba(255,107,53,.07);border:2px solid rgba(255,107,53,.25);border-radius:10px;padding:.28rem .5rem;font-family:var(--font-display);font-size:.75rem;cursor:pointer;color:var(--text-soft);white-space:nowrap;transition:all .2s;flex-shrink:0;}
 .ptog.on{background:var(--accent);color:#fff8e0;border-color:var(--accent2);}
+.ptog.cpu-on{background:#475569;color:#fff8e0;border-color:#94a3b8;}
 .btn-start{display:block;width:100%;max-width:300px;margin:1.1rem auto 0;background:linear-gradient(180deg,var(--accent),#e04010);color:#fff8e0;border:2.5px solid var(--accent2);border-radius:50px;padding:.9rem 2rem;font-family:var(--font-display);font-size:1.2rem;cursor:pointer;box-shadow:4px 4px 0 var(--shadow),0 0 20px rgba(255,107,53,.35);transition:transform .15s,box-shadow .15s;text-shadow:0 1px 4px rgba(0,0,0,.3);}
 .btn-start:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--shadow);}
 .btn-start:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow);}
@@ -342,9 +345,11 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
   #setup-panel{padding:1rem .85rem .9rem;border-radius:14px;}
   .setup-title{font-size:1.25rem;}
   .diff-btn{font-size:.78rem;padding:.3rem .7rem;}
-  .player-row{gap:.4rem;padding:.35rem .55rem;}
-  .player-row input[type=text]{font-size:.85rem;padding:.32rem .6rem;}
-  .ptog{font-size:.75rem;padding:.22rem .45rem;}
+  .player-row{gap:.35rem;padding:.35rem .45rem;}
+  .car-slot{width:44px;height:24px;}
+  .car-slot img{width:44px!important;height:24px!important;}
+  .player-name-input{font-size:.82rem;padding:.32rem .5rem;}
+  .ptog{font-size:.7rem;padding:.22rem .4rem;}
   .btn-start{font-size:1.05rem;padding:.8rem 1.5rem;}
 
   /* Pista */
@@ -402,9 +407,12 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
   .lane-label{min-width:38px;font-size:.62rem;}
   #vb-main{width:50px;}
   .bubble{max-width:130px;font-size:.66rem;}
-  .opt{font-size:calc(.82rem*var(--font-size-scale));}
-  .win-title{font-size:1.35rem;}
-  .btn-start{font-size:.95rem;padding:.7rem 1.2rem;}
+  .player-name-input{font-size:.76rem;padding:.28rem .45rem;}
+  .ptog{font-size:.64rem;padding:.16rem .32rem;}
+  .diff-btn{font-size:.72rem;padding:.26rem .55rem;}
+  .car-slot,.car-slot img{width:38px!important;height:22px!important;}
+  .car-carousel-wrap img{width:38px!important;height:22px!important;}
+  .car-carousel-arrow{width:22px!important;height:22px!important;font-size:.75rem!important;}
 }
 
 /* Tablets landscape e ecrãs médios */
@@ -835,114 +843,91 @@ function buildSetup(){
   const el=document.getElementById('players-setup');
   el.innerHTML='';
   pCfg.forEach((cfg,i)=>{
-    if(!cfg.on && i>=2) {
-      // Jogador inativo — mostrar só botão de ativar
-      const row=document.createElement('div');
-      row.className='player-row';
-      row.innerHTML=`
-        <div style="width:60px;height:32px;flex-shrink:0;opacity:.3;display:flex;align-items:center;justify-content:center;">${miniCarSVG('',i+1,i)}</div>
-        <input type="text" placeholder="${NAMES_DEF[i]}" maxlength="16" value="" disabled id="pni-${i}" style="flex:1;min-width:0;width:0;">
-        <button class="ptog" onclick="toggleP(${i})">+ Ativar</button>
-      `;
-      el.appendChild(row);
-      return;
-    }
     const locked=i<2;
     const isCpu=cfg.cpu;
+    const isActive=cfg.on;
+    const showCpuToggle=i===1;
     const row=document.createElement('div');
     row.className='player-row';
-    const showCpuToggle = i===1;
 
-    // Carrossel inline (só para humanos) — substitui o mini-carro estático
-    let carouselEl=null;
-    if(!isCpu){
+    // Car / Carousel
+    let carEl;
+    if(!isActive && i>=2){
+      carEl=document.createElement('div');
+      carEl.className='car-slot';
+      carEl.innerHTML=`<img src="${CAR_IMAGES[ALL_CARS[carSel[i]].img]}" style="width:52px;height:28px;object-fit:contain;opacity:.25;" alt="">`;
+    } else if(isCpu){
+      carEl=document.createElement('div');
+      carEl.className='car-slot';
+      carEl.innerHTML=`<img src="${CAR_IMAGES[ALL_CARS[carSel[i]].img]}" style="width:52px;height:28px;object-fit:contain;opacity:.5;" alt="PC">`;
+    } else {
       const takenByOthers=pCfg.map((c,j)=>j!==i&&c.on&&!c.cpu?carSel[j]:-1);
-      carouselEl=document.createElement('div');
-      carouselEl.className='car-carousel-wrap';
-      carouselEl.style.cssText='display:flex;align-items:center;gap:3px;flex-shrink:0;';
-
-      const btnPrev=document.createElement('button');
-      btnPrev.className='car-carousel-arrow';
-      btnPrev.innerHTML='←';
-      btnPrev.setAttribute('aria-label','Carro anterior');
-
+      carEl=document.createElement('div');
+      carEl.className='car-carousel-wrap';
+      const btnP=document.createElement('button');
+      btnP.className='car-carousel-arrow';
+      btnP.innerHTML='&#8249;';
+      btnP.setAttribute('aria-label','Carro anterior');
       const img=document.createElement('img');
-      img.style.cssText='width:60px;height:32px;object-fit:contain;transition:opacity .15s;flex-shrink:0;';
-
-      const btnNext=document.createElement('button');
-      btnNext.className='car-carousel-arrow';
-      btnNext.innerHTML='→';
-      btnNext.setAttribute('aria-label','Próximo carro');
-
-      function refreshCarousel(){
-        const ci=carSel[i];
-        const car=ALL_CARS[ci];
-        const isTaken=takenByOthers.includes(ci);
-        img.src=CAR_IMAGES[car.img];
-        img.alt=car.name;
-        img.title=car.name+(isTaken?' (já escolhido)':'');
-        img.style.opacity=isTaken?'0.35':'1';
-        img.style.filter=isTaken?'grayscale(70%)':'none';
+      img.style.cssText='width:52px;height:28px;object-fit:contain;flex-shrink:0;transition:opacity .15s;';
+      const btnN=document.createElement('button');
+      btnN.className='car-carousel-arrow';
+      btnN.innerHTML='&#8250;';
+      btnN.setAttribute('aria-label','Proximo carro');
+      function refresh(){
+        const ci=carSel[i],car=ALL_CARS[ci],taken=takenByOthers.includes(ci);
+        img.src=CAR_IMAGES[car.img];img.alt=car.name;
+        img.style.opacity=taken?'0.3':'1';
+        img.style.filter=taken?'grayscale(80%)':'none';
       }
-      function navigate(dir){
-        let ci=carSel[i];
-        const n=ALL_CARS.length;
-        for(let step=0;step<n;step++){
-          ci=(ci+dir+n)%n;
-          if(!takenByOthers.includes(ci)){carSel[i]=ci;buildSetup();return;}
-        }
-        carSel[i]=(carSel[i]+dir+n)%n;
-        buildSetup();
+      function nav(dir){
+        let ci=carSel[i];const n=ALL_CARS.length;
+        for(let s=0;s<n;s++){ci=(ci+dir+n)%n;if(!takenByOthers.includes(ci)){carSel[i]=ci;buildSetup();return;}}
+        carSel[i]=(carSel[i]+dir+ALL_CARS.length)%ALL_CARS.length;buildSetup();
       }
-      btnPrev.onclick=()=>navigate(-1);
-      btnNext.onclick=()=>navigate(1);
-      carouselEl.appendChild(btnPrev);
-      carouselEl.appendChild(img);
-      carouselEl.appendChild(btnNext);
-      refreshCarousel();
-    } else {
-      // CPU — mini-carro estático
-      carouselEl=document.createElement('div');
-      carouselEl.style.cssText='width:60px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center;';
-      carouselEl.innerHTML=miniCarSVG('',i+1,i);
+      btnP.onclick=()=>nav(-1);btnN.onclick=()=>nav(1);
+      carEl.appendChild(btnP);carEl.appendChild(img);carEl.appendChild(btnN);
+      refresh();
     }
 
-    // Input nome + toggle
-    const nameInput=document.createElement('input');
-    nameInput.type='text';
-    nameInput.placeholder=isCpu?'PC (automático)':NAMES_DEF[i];
-    nameInput.maxLength=16;
-    nameInput.value=isCpu?'':cfg.name;
-    if(!(cfg.on&&!isCpu))nameInput.disabled=true;
-    nameInput.id='pni-'+i;
-    nameInput.style.cssText='flex:1;min-width:0;width:0;'+(isCpu?'opacity:.45;font-style:italic;':'');
-    nameInput.oninput=function(){pCfg[i].name=this.value;if(this.value.trim()&&pCfg[i].cpu){pCfg[i].cpu=false;buildSetup();}};
+    // Name input
+    const inp=document.createElement('input');
+    inp.type='text';
+    inp.className='player-name-input';
+    inp.placeholder=isCpu?'PC (automatico)':NAMES_DEF[i];
+    inp.maxLength=16;
+    inp.value=isCpu?'':cfg.name;
+    inp.disabled=!(isActive&&!isCpu);
+    inp.id='pni-'+i;
+    if(isCpu)inp.style.cssText='opacity:.4;font-style:italic;';
+    inp.oninput=function(){pCfg[i].name=this.value;if(this.value.trim()&&pCfg[i].cpu){pCfg[i].cpu=false;buildSetup();}};
 
-    let toggleEl;
-    if(locked){
-      if(showCpuToggle){
-        toggleEl=document.createElement('button');
-        toggleEl.className='ptog'+(isCpu?' on':'');
-        if(isCpu)toggleEl.style.cssText='background:#475569;border-color:#94a3b8;';
-        toggleEl.style.whiteSpace='nowrap';
-        toggleEl.textContent=isCpu?'🤖 PC':'🤖 vs PC';
-        toggleEl.onclick=toggleCpu;
-      } else {
-        toggleEl=document.createElement('span');
-        toggleEl.style.cssText='font-size:.8rem;color:#4ecb71;padding:0 .3rem;font-weight:900';
-        toggleEl.textContent='✔';
-      }
+    // Right button
+    let btnEl;
+    if(!isActive && i>=2){
+      btnEl=document.createElement('button');
+      btnEl.className='ptog';
+      btnEl.textContent='＋ Ativar';
+      btnEl.onclick=()=>toggleP(i);
+    } else if(locked && showCpuToggle){
+      btnEl=document.createElement('button');
+      btnEl.className='ptog'+(isCpu?' cpu-on':'');
+      btnEl.textContent=isCpu?'🤖 PC':'vs 🤖';
+      btnEl.onclick=toggleCpu;
+    } else if(locked){
+      btnEl=document.createElement('span');
+      btnEl.className='player-check';
+      btnEl.textContent=String.fromCharCode(10003);
     } else {
-      toggleEl=document.createElement('button');
-      toggleEl.className='ptog on';
-      toggleEl.textContent='Ativo';
-      toggleEl.onclick=()=>toggleP(i);
+      btnEl=document.createElement('button');
+      btnEl.className='ptog on';
+      btnEl.textContent='Ativo';
+      btnEl.onclick=()=>toggleP(i);
     }
 
-    row.appendChild(carouselEl);
-    row.appendChild(nameInput);
-    row.appendChild(toggleEl);
-
+    row.appendChild(carEl);
+    row.appendChild(inp);
+    row.appendChild(btnEl);
     el.appendChild(row);
   });
 }
