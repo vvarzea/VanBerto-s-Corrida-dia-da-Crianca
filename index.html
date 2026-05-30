@@ -2,7 +2,7 @@
 <html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>VanBerto's</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -24,8 +24,10 @@
   --font-size-scale:1;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.opt{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
 html,body{min-height:100vh;overscroll-behavior:none;user-select:none;-webkit-user-select:none;}
-body{font-family:var(--font-body);background:var(--bg-deep);min-height:100vh;overflow-x:hidden;color:var(--text);}
+body{font-family:var(--font-body);background:var(--bg-deep);min-height:100vh;overflow-x:hidden;color:var(--text);padding-bottom:env(safe-area-inset-bottom,0px);}
 body::before{
   content:'';position:fixed;inset:0;z-index:0;
   background:
@@ -37,7 +39,7 @@ body::before{
 #confetti-cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:900;}
 
 /* ── MUTE / FULLSCREEN / FONT ── */
-.top-controls{position:fixed;top:.7rem;right:.7rem;z-index:400;display:flex;gap:.4rem;}
+.top-controls{position:fixed;top:max(.7rem, env(safe-area-inset-top, .7rem));right:max(.7rem, env(safe-area-inset-right, .7rem));z-index:400;display:flex;gap:.4rem;}
 .ctrl-btn{
   background:rgba(26,8,53,.92);border:2px solid var(--border);
   border-radius:50%;width:44px;height:44px;font-size:1.1rem;
@@ -65,7 +67,7 @@ header h1{
 .hd-sub{font-family:var(--font-ui);font-size:clamp(.72rem,1.8vw,.88rem);color:var(--text-soft);font-weight:800;background:rgba(255,107,53,.12);border:1px solid rgba(255,107,53,.2);border-radius:50px;padding:.18rem .9rem;margin-top:.3rem;display:inline-block;}
 @keyframes vbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 
-main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1rem .75rem 9rem;position:relative;z-index:2;}
+main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1rem .75rem 9rem;position:relative;z-index:2;width:100%;}
 
 /* ── LOADING SCREEN ── */
 #loading-screen{
@@ -122,13 +124,13 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 .btn-start:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow);}
 
 /* ── PISTA ── */
-#track-wrap{width:100%;max-width:100%;background:linear-gradient(145deg,var(--bg-card),#1a0835);border:2px solid var(--border);border-radius:18px;padding:1rem 1.1rem;box-shadow:0 0 0 2px rgba(255,215,0,.12),5px 5px 0 var(--shadow);}
+#track-wrap{width:100%;max-width:100%;background:linear-gradient(145deg,var(--bg-card),#1a0835);border:2px solid var(--border);border-radius:18px;padding:1rem 1.1rem;box-shadow:0 0 0 2px rgba(255,215,0,.12),5px 5px 0 var(--shadow);overflow:hidden;}
 .track-hdr{font-family:var(--font-display);font-size:1rem;color:var(--accent2);text-align:center;margin-bottom:.75rem;text-shadow:0 1px 8px rgba(255,107,53,.3);width:100%;}
 .lane{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
 .lane-label{font-family:var(--font-display);font-size:.8rem;min-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;align-self:center;}
 .track-bar{flex:1;height:70px;background:rgba(255,107,53,.07);border-radius:23px;position:relative;border:1.5px solid rgba(255,107,53,.2);overflow:hidden;}
 .track-bar::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 20px,rgba(255,215,0,.04) 20px,rgba(255,215,0,.04) 21px);pointer-events:none;}
-.vb-runner{position:absolute;top:50%;transform:translateY(-50%);width:120px;height:60px;transition:left .75s cubic-bezier(.4,1.4,.6,1);left:4px;}
+.vb-runner{position:absolute;top:50%;transform:translateY(-50%);width:var(--runner-w,120px);height:var(--runner-h,60px);transition:left .75s cubic-bezier(.4,1.4,.6,1);left:4px;}
 .finish-flag{position:absolute;right:0;top:0;bottom:0;width:22px;background:repeating-linear-gradient(180deg,#ffffff 0px,#ffffff 7px,#111827 7px,#111827 14px);border-radius:0 23px 23px 0;opacity:1;border-left:3px solid #ffd700;z-index:2;}
 .finish-flag::before{content:"🏁";position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:15px;filter:drop-shadow(0 0 4px #ffd700);}
 .pts-badge{font-family:var(--font-display);font-size:.9rem;min-width:28px;text-align:right;color:var(--accent2);}
@@ -193,7 +195,7 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 @keyframes vbWave{0%,100%{transform:rotate(0)}25%,75%{transform:rotate(-18deg)}}
 
 /* ── WIN ── */
-#win-overlay{display:none;position:fixed;inset:0;background:rgba(5,2,15,.9);z-index:800;justify-content:center;align-items:center;overflow-y:auto;padding:1rem;}
+#win-overlay{display:none;position:fixed;inset:0;background:rgba(5,2,15,.9);z-index:800;justify-content:center;align-items:flex-start;overflow-y:auto;padding:1rem;padding-top:max(1rem, env(safe-area-inset-top));}
 #win-overlay.show{display:flex;}
 .win-card{background:linear-gradient(145deg,#2a0a4e,#1a0835,#0f0525);border-radius:20px;padding:1.8rem 1.4rem;text-align:center;max-width:440px;width:96%;box-shadow:0 0 0 3px var(--accent),0 0 0 5px var(--accent2),10px 10px 0 var(--shadow),0 0 60px rgba(255,107,53,.25);margin:auto;animation:popIn .55s cubic-bezier(.34,1.56,.64,1) both;position:relative;}
 .win-card::before{content:'🏆';position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:2.8rem;filter:drop-shadow(0 4px 12px rgba(255,215,0,.5));}
@@ -312,28 +314,109 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 }
 
 /* ── RESPONSIVE ── */
+
+/* Tablets e ecrãs médios */
+@media(max-width:768px){
+  main{padding:1rem .6rem 8rem;}
+  #setup-panel{padding:1.2rem 1rem 1rem;}
+  .win-card{padding:1.4rem 1rem;}
+}
+
+/* Telemóveis */
 @media(max-width:480px){
-  #opts{grid-template-columns:1fr;}
-  .opt{font-size:.88rem;}
-  .lane-label{min-width:48px;font-size:.7rem;}
-  .robot-wrap{bottom:.5rem;right:.5rem;}
-  #vb-main{width:62px;}
-  .bubble{max-width:155px;font-size:.72rem;}
-  .top-controls{top:.5rem;right:.5rem;}
-  .ctrl-btn{width:38px;height:38px;font-size:.95rem;}
-  /* pista compacta em mobile */
-  .track-bar{height:60px!important;}
-  .vb-runner{width:70px!important;height:56px!important;}
-  .vb-runner svg{width:70px;height:56px;}
-  .lane{margin-bottom:4px;}
-  .pts-badge{font-size:.8rem;}
+  /* Layout geral */
+  main{padding:.75rem .5rem 7rem;gap:.75rem;}
+
+  /* Header */
+  header{padding:.55rem .75rem .45rem;}
+  header h1{font-size:clamp(1rem,5vw,1.3rem);}
+  .hd-sub{font-size:.7rem;padding:.15rem .65rem;}
+
+  /* Controlos topo */
+  .top-controls{top:.45rem;right:.45rem;gap:.3rem;}
+  .ctrl-btn{width:36px;height:36px;font-size:.88rem;}
+  .font-ctrl{font-size:.75rem;padding:0 .5rem;}
+
+  /* Setup */
+  #setup-panel{padding:1rem .85rem .9rem;border-radius:14px;}
+  .setup-title{font-size:1.25rem;}
+  .diff-btn{font-size:.78rem;padding:.3rem .7rem;}
+  .player-row{gap:.4rem;padding:.35rem .55rem;}
+  .player-row input[type=text]{font-size:.85rem;padding:.32rem .6rem;}
+  .ptog{font-size:.75rem;padding:.22rem .45rem;}
+  .btn-start{font-size:1.05rem;padding:.8rem 1.5rem;}
+
+  /* Pista */
+  .track-bar{height:56px!important;}
+  .vb-runner{width:66px!important;height:52px!important;}
+  .vb-runner svg{width:66px!important;height:52px!important;}
+  .lane{margin-bottom:4px;gap:6px;}
+  .lane-label{min-width:44px;font-size:.68rem;}
+  .pts-badge{font-size:.78rem;min-width:22px;}
   #track-toggle{display:block;}
+  #track-wrap{padding:.75rem .8rem;}
+  .track-hdr{font-size:.88rem;margin-bottom:.55rem;}
+
+  /* Timer */
+  #timer-txt{font-size:.8rem;}
+
+  /* Pergunta */
+  #q-wrap{max-width:100%;}
+  #q-box{padding:.85rem .9rem .75rem;border-radius:14px;}
+  #q-text{font-size:calc(clamp(.92rem,3.5vw,1.1rem)*var(--font-size-scale));margin-bottom:.75rem;}
+  #opts{grid-template-columns:1fr;gap:.45rem;}
+  .opt{font-size:calc(.88rem*var(--font-size-scale));padding:.62rem .75rem;}
+  #turn-label{font-size:.82rem;}
+  #q-counter{font-size:.78rem;}
+  #feedback{font-size:.95rem;}
+  #cat-badge{font-size:.78rem;}
+
+  /* Scoreboard */
+  #scoreboard{padding:.5rem .7rem;}
   #scoreboard .score-row{gap:.3rem;}
   #scoreboard .score-name{font-size:.78rem;}
+  #scoreboard .score-pts{font-size:.78rem;}
+
+  /* Robot */
+  .robot-wrap{bottom:.45rem;right:.45rem;}
+  #vb-main{width:58px;}
+  .bubble{max-width:150px;font-size:.7rem;padding:7px 11px 7px;}
+
+  /* Win overlay */
+  .win-card{padding:1.3rem .9rem;border-radius:16px;}
+  .win-title{font-size:1.6rem;}
+  .pod-row{padding:.5rem .75rem;font-size:.9rem;gap:.5rem;}
+  .pod-medal{font-size:1.3rem;}
+  #history-content{max-height:180px;}
 }
+
+/* Ecrãs muito pequenos */
 @media(max-width:360px){
-  header h1{font-size:1rem;}
-  .setup-title{font-size:1.2rem;}
+  header h1{font-size:.95rem;}
+  .setup-title{font-size:1.1rem;}
+  .ctrl-btn{width:32px;height:32px;font-size:.8rem;}
+  .track-bar{height:48px!important;}
+  .vb-runner{width:58px!important;height:46px!important;}
+  .vb-runner svg{width:58px!important;height:46px!important;}
+  .lane-label{min-width:38px;font-size:.62rem;}
+  #vb-main{width:50px;}
+  .bubble{max-width:130px;font-size:.66rem;}
+  .opt{font-size:calc(.82rem*var(--font-size-scale));}
+  .win-title{font-size:1.35rem;}
+  .btn-start{font-size:.95rem;padding:.7rem 1.2rem;}
+}
+
+/* Tablets landscape e ecrãs médios */
+@media(min-width:481px) and (max-width:900px){
+  main{padding:1rem .85rem 8rem;}
+  #q-text{font-size:calc(clamp(1rem,2.5vw,1.15rem)*var(--font-size-scale));}
+}
+
+/* Ecrãs grandes — aproveitar espaço */
+@media(min-width:900px){
+  main{max-width:720px;margin:0 auto;padding:1.2rem 1rem 9rem;}
+  #setup-panel,#q-wrap,#timer-wrap,#scoreboard,#tiebreak-banner{max-width:660px;}
+  #track-wrap{max-width:100%;}
 }
 
 /* ── CARROSSEL DE CARRO (inline) ── */
@@ -720,7 +803,7 @@ function miniCarSVG(color, num, gi){
 function carSVG(color, theme, num, gi){
   const carIdx=(gi!==undefined && carSel&&carSel[gi]!==undefined)
     ? ALL_CARS[carSel[gi]].img : Math.min(gi||0, CAR_IMAGES.length-1);
-  return `<img src="${CAR_IMAGES[carIdx]}" style="width:120px;height:60px;object-fit:contain;" alt="Carro ${num}">`;
+  return `<img src="${CAR_IMAGES[carIdx]}" style="width:100%;height:100%;object-fit:contain;display:block;" alt="Carro ${num}">`;
 }
 
 /* ══ ESTADO ══ */
@@ -946,13 +1029,12 @@ function updateTrack(justScored){
     const bar=document.getElementById(`bar-${i}`);
     const runner=document.getElementById(`runner-${i}`);
     if(!bar||!runner)return;
-    const flagWidth=22; // finish flag width
+    const flagWidth=22;
     const carWidth=runner.offsetWidth||100;
     const max=bar.offsetWidth-carWidth-flagWidth-4;
     const pct=Math.min(positions[i]/(window._tbMax||Q_PER_PLAYER),1);
     runner.style.left=Math.max(2,pct*max)+'px';
     document.getElementById(`pts-${i}`).textContent=scores[i];
-    // finish animation
     if(pct>=1&&!finished[i]){
       finished[i]=true;
       runner.classList.add('finishing');
@@ -964,7 +1046,7 @@ function updateTrack(justScored){
         setTimeout(()=>cross.remove(),700);
       }
       const r=runner.getBoundingClientRect();
-      burst(r.left+40,r.top+20,35);
+      burst(r.left+carWidth/2,r.top+runner.offsetHeight/2,35);
       setTimeout(()=>runner.classList.remove('finishing'),1000);
     }
   });
@@ -1361,6 +1443,8 @@ window.addEventListener('resize',()=>{
     col.classList.remove('collapsed');
     col.style.maxHeight='none';
   }
+  // Recalculate runner positions on resize
+  if(typeof positions!=='undefined'&&positions.length)updateTrack(false);
 });
 
 /* ══ PAUSA ══ */
