@@ -134,7 +134,8 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 .lane-label{font-family:var(--font-display);font-size:.8rem;min-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;align-self:center;}
 .track-bar{flex:1;height:70px;background:rgba(255,107,53,.07);border-radius:23px;position:relative;border:1.5px solid rgba(255,107,53,.2);overflow:hidden;}
 .track-bar::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 20px,rgba(255,215,0,.04) 20px,rgba(255,215,0,.04) 21px);pointer-events:none;}
-.vb-runner{position:absolute;top:50%;transform:translateY(-50%);width:var(--runner-w,120px);height:var(--runner-h,60px);transition:left .75s cubic-bezier(.4,1.4,.6,1);left:4px;}
+.vb-runner{position:absolute;top:50%;transform:translateY(-50%);width:var(--runner-w,120px);height:var(--runner-h,60px);transition:left .75s cubic-bezier(.4,1.4,.6,1);left:4px;cursor:pointer;}
+.vb-runner:hover{transform:translateY(-50%) scale(1.35);z-index:10;filter:drop-shadow(0 0 10px rgba(255,215,0,.7));transition:left .75s cubic-bezier(.4,1.4,.6,1),transform .2s cubic-bezier(.34,1.56,.64,1),filter .2s;}
 .finish-flag{position:absolute;right:0;top:0;bottom:0;width:22px;background:repeating-linear-gradient(180deg,#ffffff 0px,#ffffff 7px,#111827 7px,#111827 14px);border-radius:0 23px 23px 0;opacity:1;border-left:3px solid #ffd700;z-index:2;}
 .finish-flag::before{content:"🏁";position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:15px;filter:drop-shadow(0 0 4px #ffd700);}
 .pts-badge{font-family:var(--font-display);font-size:.9rem;min-width:28px;text-align:right;color:var(--accent2);}
@@ -283,7 +284,7 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 .score-pts{font-family:var(--font-display);font-size:.88rem;min-width:28px;text-align:right;}
 
 /* ── ANIMAÇÕES RUNNER ── */
-@keyframes carShake{0%,100%{transform:translateY(-50%) rotate(0)}25%{transform:translateY(-52%) rotate(-3deg)}75%{transform:translateY(-48%) rotate(3deg)}}
+@keyframes carShake{0%,100%{transform:translateY(-50%) rotate(0) scale(1)}25%{transform:translateY(-52%) rotate(-3deg) scale(1)}75%{transform:translateY(-48%) rotate(3deg) scale(1)}}
 @keyframes carFinish{
   0%{transform:translateY(-50%) scale(1)}
   20%{transform:translateY(-50%) scale(1.2)}
@@ -430,6 +431,8 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 
 /* ── CARROSSEL DE CARRO (inline) ── */
 .car-carousel-wrap{display:flex;align-items:center;gap:3px;flex-shrink:0;}
+.car-carousel-wrap img{transition:transform .2s cubic-bezier(.34,1.56,.64,1),filter .2s;cursor:pointer;}
+.car-carousel-wrap img:hover{transform:scale(1.45);filter:drop-shadow(0 0 8px rgba(255,215,0,.75));}
 .car-carousel-arrow{
   background:rgba(255,107,53,.12);border:2px solid rgba(255,107,53,.35);
   border-radius:50%;width:26px;height:26px;flex-shrink:0;
