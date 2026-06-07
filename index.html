@@ -113,8 +113,9 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 .diff-btn.hard.active{background:#ff6b35;color:#fff8e0;box-shadow:0 0 12px rgba(255,107,53,.5);}
 .diff-desc{font-size:.8rem;color:var(--text-soft);text-align:center;margin-bottom:.7rem;font-style:italic;min-height:14px;}
 
-.player-row{display:flex;align-items:center;gap:.45rem;margin-bottom:.5rem;background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.18);border-radius:12px;padding:.4rem .55rem;min-width:0;overflow:hidden;}
-.car-slot{width:52px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.player-row{display:flex;align-items:center;gap:.45rem;margin-bottom:.5rem;background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.18);border-radius:12px;padding:.5rem .55rem;min-width:0;overflow:hidden;}
+.car-slot{width:80px;height:50px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.car-slot svg,.car-slot img{width:100%;height:100%;}
 .player-name-input{flex:1;min-width:0;width:0;background:rgba(255,255,255,.07);border:2px solid rgba(255,107,53,.3);border-radius:10px;padding:.38rem .6rem;font-family:var(--font-body);font-size:.9rem;font-weight:800;color:var(--accent2);outline:none;transition:border-color .2s;overflow:hidden;text-overflow:ellipsis;}
 .player-name-input:focus{border-color:var(--accent);}
 .player-name-input::placeholder{color:rgba(255,184,144,.35);}
@@ -132,9 +133,9 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 .track-hdr{font-family:var(--font-display);font-size:1rem;color:var(--accent2);text-align:center;margin-bottom:.75rem;text-shadow:0 1px 8px rgba(255,107,53,.3);width:100%;}
 .lane{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
 .lane-label{font-family:var(--font-display);font-size:.8rem;min-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;align-self:center;}
-.track-bar{flex:1;height:70px;background:rgba(255,107,53,.07);border-radius:23px;position:relative;border:1.5px solid rgba(255,107,53,.2);overflow:hidden;}
+.track-bar{flex:1;height:100px;background:rgba(255,107,53,.07);border-radius:23px;position:relative;border:1.5px solid rgba(255,107,53,.2);overflow:hidden;}
 .track-bar::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 20px,rgba(255,215,0,.04) 20px,rgba(255,215,0,.04) 21px);pointer-events:none;}
-.vb-runner{position:absolute;top:50%;transform:translateY(-50%);width:var(--runner-w,120px);height:var(--runner-h,60px);transition:left .75s cubic-bezier(.4,1.4,.6,1);left:4px;cursor:pointer;}
+.vb-runner{position:absolute;top:50%;transform:translateY(-50%);width:var(--runner-w,170px);height:var(--runner-h,85px);transition:left .75s cubic-bezier(.4,1.4,.6,1);left:4px;cursor:pointer;}
 .vb-runner:hover{transform:translateY(-50%) scale(1.35);z-index:10;filter:drop-shadow(0 0 10px rgba(255,215,0,.7));transition:left .75s cubic-bezier(.4,1.4,.6,1),transform .2s cubic-bezier(.34,1.56,.64,1),filter .2s;}
 .finish-flag{position:absolute;right:0;top:0;bottom:0;width:22px;background:repeating-linear-gradient(180deg,#ffffff 0px,#ffffff 7px,#111827 7px,#111827 14px);border-radius:0 23px 23px 0;opacity:1;border-left:3px solid #ffd700;z-index:2;}
 .finish-flag::before{content:"🏁";position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:15px;filter:drop-shadow(0 0 4px #ffd700);}
@@ -565,7 +566,7 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
     <div id="feedback"></div>
   </div>
 
-  <p class="signature">✦ Professora Vanda Várzea ✦</p>
+  <p class="signature">© Professora Vanda Várzea</p>
 </main>
 
 <!-- WIN -->
@@ -1652,7 +1653,7 @@ function bub(msg,speak=true){
   const el=document.getElementById('bubble'),rb=document.getElementById('vb-main');
   el.textContent=msg;el.classList.add('show');
   rb.classList.remove('bounce');void rb.offsetWidth;rb.classList.add('bounce');
-  if(speak){const c=msg.replace(/[\u{1F000}-\u{1FFFF}\u2600-\u27FF]/gu,'').trim();if(c)say(c);}
+  // fala desativada — só texto no balão
   bubT=setTimeout(()=>el.classList.remove('show'),4500);
 }
 
