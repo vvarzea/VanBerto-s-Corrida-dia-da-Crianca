@@ -443,6 +443,21 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 }
 .car-carousel-arrow:hover{background:rgba(255,107,53,.28);transform:scale(1.12);}
 .car-carousel-arrow:active{transform:scale(.94);}
+
+/* ── ESCALA PC (só desktops não-touch, janelas < 1920×1080) ── */
+:root { --pc-scale: 1; }
+#game-scaler {
+  transform-origin: top center;
+  transform: scale(var(--pc-scale));
+  /* Quando escala < 1, o wrapper encolhe mas o body ainda reserva a altura original.
+     Corrigimos isso com width e margin auto. */
+  width: 100%;
+  transition: transform 0.15s ease;
+}
+/* Ajustar altura do body ao conteúdo escalado */
+body.pc-scaled {
+  overflow-x: hidden;
+}
 </style>
 </head>
 <body>
@@ -493,6 +508,7 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
   </div>
 </div>
 
+<div id="game-scaler">
 <header>
   <div>
     <h1>VanBerto's</h1>
@@ -516,18 +532,7 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
     <button class="btn-start" onclick="startGame()">▶ Iniciar corrida! 🏁</button>
   </div>
 
-
-
-  <!-- CONTAGEM DECRESCENTE -->
-<div id="countdown-overlay">
-  <div id="countdown-num">3</div>
-  <div id="countdown-label">Prepara-te!</div>
-</div>
-
-<!-- STREAK BADGE -->
-<div class="streak-badge" id="streak-badge"></div>
-
-<!-- BOTÃO TOGGLE PISTA (mobile) -->
+  <!-- BOTÃO TOGGLE PISTA (mobile) -->
   <button id="track-toggle" onclick="toggleTrack()">
     <span id="track-toggle-label">🏁 Ver pista</span>
     <span class="tog-arrow">▼</span>
@@ -568,6 +573,16 @@ main{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.1r
 
   <p class="signature">© Professora Vanda Várzea</p>
 </main>
+</div><!-- #game-scaler -->
+
+<!-- CONTAGEM DECRESCENTE (position:fixed — fora do scaler) -->
+<div id="countdown-overlay">
+  <div id="countdown-num">3</div>
+  <div id="countdown-label">Prepara-te!</div>
+</div>
+
+<!-- STREAK BADGE (position:fixed — fora do scaler) -->
+<div class="streak-badge" id="streak-badge"></div>
 
 <!-- WIN -->
 <div id="win-overlay" role="dialog" aria-modal="true">
@@ -1734,6 +1749,69 @@ window.addEventListener('load',()=>{
   },1200);
   setTimeout(()=>bub('Olá! Sou o VanBerto! Coloca os nomes, escolhe o teu carro e vamos jogar! 🏎️',true),1900);
 });
+
+/* ══ ESCALA RESPONSIVA PC ══
+   Só activa em desktops (sem touch primário) quando a janela
+   é menor que a resolução de referência 1920×1080.
+   Elementos position:fixed (canvases, overlays, robot, top-controls)
+   ficam fora do #game-scaler e não são afectados pela transform.
+*/
+(()=>{
+  const REF_W = 1920, REF_H = 1080;
+  const scaler = document.getElementById('game-scaler');
+
+  /* Detectar se é dispositivo touch principal (smartphone/tablet).
+     Em touch, não aplicamos escala — o layout mobile já funciona. */
+  function isTouchDevice(){
+    return (('ontouchstart' in window) ||
+            (navigator.maxTouchPoints > 1) ||
+            window.matchMedia('(pointer: coarse)').matches);
+  }
+
+  function applyScale(){
+    if(isTouchDevice()){
+      /* Garantir que no mobile/tablet não existe escala residual */
+      scaler.style.transform = '';
+      document.documentElement.style.removeProperty('--pc-scale');
+      document.body.classList.remove('pc-scaled');
+      scaler.style.marginBottom = '';
+      return;
+    }
+
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const scale = Math.min(w / REF_W, h / REF_H, 1); /* nunca > 1 */
+
+    if(scale >= 0.995){
+      /* Resolução suficiente — sem escala */
+      scaler.style.transform = '';
+      document.documentElement.style.removeProperty('--pc-scale');
+      document.body.classList.remove('pc-scaled');
+      scaler.style.marginBottom = '';
+      return;
+    }
+
+    /* Aplicar escala */
+    document.documentElement.style.setProperty('--pc-scale', scale);
+    scaler.style.transform = `scale(${scale})`;
+    document.body.classList.add('pc-scaled');
+
+    /* Quando scale < 1 o elemento ainda ocupa a altura original no layout.
+       Compensamos reduzindo a altura reservada para o espaço extra. */
+    const naturalH = scaler.scrollHeight;
+    const scaledH  = naturalH * scale;
+    const diff     = naturalH - scaledH;
+    scaler.style.marginBottom = `-${diff}px`;
+  }
+
+  /* Correr no arranque e a cada resize */
+  applyScale();
+  let resizeTimer;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(applyScale, 60);
+  });
+})();
 </script>
 </body>
 </html>
